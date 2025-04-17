@@ -1,15 +1,5 @@
 import express from "express";
-import {
-  register,
-  login,
-  refreshToken,
-  logout,
-  getProfile,
-  verifyEmail,
-  requestPasswordReset,
-  resetPassword,
-  resendVerificationEmail,
-} from "../controllers/auth.controller";
+import authController from "../controllers/auth.controller";
 import { authenticate } from "../middleware/auth.middleware";
 import {
   validateRegistration,
@@ -22,29 +12,49 @@ import {
 
 const router = express.Router();
 
-/**
- * Authentication Routes
- */
-
 // Registration and verification
-router.post("/register", validateRegistration, register);
-router.get("/verify-email", verifyEmail);
+router.post(
+  "/register",
+  validateRegistration,
+  authController.register.bind(authController)
+);
+router.get("/verify-email", authController.verifyEmail.bind(authController));
 router.post(
   "/resend-verification",
   validateForgotPassword,
-  resendVerificationEmail
+  authController.resendVerificationEmail.bind(authController)
 );
 
 // Login and session management
-router.post("/login", validateLogin, login);
-router.post("/refresh-token", validateRefreshToken, refreshToken);
-router.post("/logout", validateLogout, logout);
+router.post("/login", validateLogin, authController.login.bind(authController));
+router.post(
+  "/refresh-token",
+  validateRefreshToken,
+  authController.refreshToken.bind(authController)
+);
+router.post(
+  "/logout",
+  validateLogout,
+  authController.logout.bind(authController)
+);
 
 // Password management
-router.post("/forgot-password", validateForgotPassword, requestPasswordReset);
-router.post("/reset-password", validatePasswordReset, resetPassword);
+router.post(
+  "/forgot-password",
+  validateForgotPassword,
+  authController.requestPasswordReset.bind(authController)
+);
+router.post(
+  "/reset-password",
+  validatePasswordReset,
+  authController.resetPassword.bind(authController)
+);
 
 // User profile
-router.get("/profile", authenticate, getProfile);
+router.get(
+  "/profile",
+  authenticate,
+  authController.getProfile.bind(authController)
+);
 
 export default router;

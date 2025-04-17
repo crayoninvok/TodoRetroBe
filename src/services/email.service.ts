@@ -72,6 +72,7 @@ export const generateVerificationToken = async (
 ): Promise<string> => {
   // Generate a random token
   const token = crypto.randomBytes(32).toString("hex");
+  console.log("Generated raw token:", token);
 
   // Calculate expiry (24 hours from now)
   const expiresAt = new Date();
@@ -95,7 +96,12 @@ export const sendVerificationEmail = async (
   name: string | null,
   token: string
 ): Promise<void> => {
-  const verificationLink = `${APP_URL}/api/auth/verify-email?token=${token}`;
+  // Important: Make sure FRONTEND_URL doesn't have a trailing slash
+  const frontendUrl = FRONTEND_URL.replace(/\/$/, "");
+  const verificationLink = `${frontendUrl}/verify-email?token=${token}`;
+
+  console.log("Sending verification email to:", email);
+  console.log("Verification link:", verificationLink);
 
   const context = {
     name: name || "there",
@@ -122,6 +128,7 @@ export const sendVerificationEmail = async (
     console.log(`Verification email sent to ${email}`);
   } catch (error) {
     console.error("Failed to send verification email:", error);
+    console.error(error);
     // Don't throw, just log - we want registration to succeed even if email fails
   }
 };
@@ -132,7 +139,11 @@ export const sendPasswordResetEmail = async (
   name: string | null,
   token: string
 ): Promise<void> => {
-  const resetLink = `${FRONTEND_URL}/reset-password?token=${token}`;
+  const frontendUrl = FRONTEND_URL.replace(/\/$/, "");
+  const resetLink = `${frontendUrl}/reset-password?token=${token}`;
+
+  console.log("Sending password reset email to:", email);
+  console.log("Reset link:", resetLink);
 
   const context = {
     name: name || "there",
