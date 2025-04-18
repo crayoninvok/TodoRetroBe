@@ -12,25 +12,16 @@ dotenv.config();
 // Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 8000;
-const allowedOrigins = [
-  "http://localhost:3000",
-  "https://fraud-todo-xeesaxii.vercel.app", // frontend production kamu
-];
 // Middleware
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin: process.env.FRONTEND_URL,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+app.use(express.json());
 
 // Routes
 app.use("/api/auth", authRouter);
