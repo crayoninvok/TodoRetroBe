@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import authRouter from "./router/auth.router";
+import todoRouter from "./router/todo.router";
 import { errorHandler } from "./middleware/error.middleware";
 import prisma from "./config/prisma";
 
@@ -17,7 +18,7 @@ app.use(
   cors({
     origin: process.env.FRONTEND_URL || "http://localhost:3000",
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
@@ -25,6 +26,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api/auth", authRouter);
+app.use("/api/todos", todoRouter);
 
 // Base route
 app.get("/", (req, res) => {
