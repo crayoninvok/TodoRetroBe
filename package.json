@@ -4,14 +4,15 @@
   "description": "Todo list API with authentication",
   "main": "dist/index.js",
   "scripts": {
-    "start": "node dist/index.js",
-    "dev": "nodemon --exec ts-node src/index.ts",
-    "build": "tsc",
-    "lint": "eslint . --ext .ts",
-    "test": "jest",
-    "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev"
-  },
+  "start": "node dist/index.js",
+  "dev": "nodemon --exec ts-node src/index.ts",
+  "build": "tsc",
+  "vercel-build": "prisma generate && tsc",
+  "lint": "eslint . --ext .ts",
+  "test": "jest",
+  "prisma:generate": "prisma generate",
+  "prisma:migrate": "prisma migrate dev"
+},
   "keywords": [
     "todo",
     "express",
