@@ -24,14 +24,24 @@ dotenv_1.default.config();
 // Initialize Express app
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 8000;
+const allowedOrigins = [
+    "http://localhost:3000",
+    "https://fraud-todo-xeesaxii.vercel.app", // frontend production kamu
+];
 // Middleware
 app.use((0, cors_1.default)({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        }
+        else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
 }));
-app.use(express_1.default.json());
 // Routes
 app.use("/api/auth", auth_router_1.default);
 app.use("/api/todos", todo_router_1.default);
